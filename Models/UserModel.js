@@ -25,8 +25,17 @@ const UserModal = mongoose.Schema({
         enum: ["User", "Company"]
     }, 
     companyName: {
+        type: String,
+        required: true
+    },
+    companyImage:{
+        type: String,
+        required: true
+    },
+    companyDescription: {
         type: String
     }
+    
 
 }, { timestamps: true })
 

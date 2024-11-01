@@ -17,6 +17,12 @@ const ProductModal = mongoose.Schema({
     productImage: {
         type: Array,
         // require: true
+    },
+    productPrice:{
+        type: String,
+    },
+    productCategories: { 
+        type: Array,  
     }
 
 }, { timestamps: true })

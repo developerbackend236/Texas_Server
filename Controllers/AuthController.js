@@ -8,7 +8,10 @@ require('dotenv').config()
 
 class AuthController {
     static Register = async (req, res) => {
-        const { name, email, password, phone, role, companyName } = req.body
+        const imagePath = req.file ? req.file.path : null;
+
+
+        const { name, email, password, phone, role, companyName, companyDescription } = req.body
 
         try {
             const user = await UserModel.findOne({ email: { $regex: email, $options: 'i' } });
@@ -28,7 +31,10 @@ class AuthController {
                 password: HashPassword,
                 phone,
                 role,
-                companyName: ( role === "Company" ? companyName : null )
+                companyName: companyName,
+                companyDescription: companyDescription,
+                companyImage: imagePath
+
             })
 
             await CreateAccount.save()
@@ -287,6 +293,54 @@ class AuthController {
             res.status(200).json({
                 success: false,
                 message: error.message
+            })
+        }
+    }
+
+    static EditProfile = async (req,res) =>{
+
+
+        const currentUser = req.user
+        const {name, phone, companyName, companyDescription} = req.body
+
+        const companyImage = req.file ? req.file.path : null;
+
+        try {
+
+            const UserData = await UserModel.findOne({_id: currentUser._id})
+
+            if(name){
+                UserData.name = name
+            }
+            if(phone){
+                UserData.phone = phone
+            }
+            if(companyName){
+                UserData.companyName = companyName
+            }
+            if(companyDescription){
+                UserData.companyDescription = companyDescription
+            }
+
+            if(companyImage) {
+                UserData.companyImage = companyImage
+            }
+
+
+            await UserData.save()
+
+
+
+            res.status(200).send({
+                message:"user data",
+                data: UserData
+            })
+            
+        } catch (error) {
+            res.status(401).send({
+                message:"error",
+                error: error
+              
             })
         }
     }
