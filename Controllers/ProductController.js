@@ -69,6 +69,7 @@ class ProductController {
 
             res.status(200).send({
                 message:"success",
+                baseUrl: "https://khvw9wf1-3028.inc1.devtunnels.ms/",
               allCompanies: allCompanies
             })
         } catch (error) {
