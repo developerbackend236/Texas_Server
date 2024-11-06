@@ -22,7 +22,15 @@ const ProductModal = mongoose.Schema({
         type: String,
     },
     productCategories: { 
-        type: Array,  
+        type: String,  
+    },
+    AvaRating:{
+        default: 0,
+        type: Number,
+    },
+    TotalNumberOfRating:{
+        default: 0,
+        type: Number,
     }
 
 }, { timestamps: true })

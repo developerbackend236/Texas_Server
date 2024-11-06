@@ -89,7 +89,10 @@ class AuthController {
                                 name: emailExist.name,
                                 email: emailExist.email,
                                 phone: emailExist.phone,
+                                UserProfile: emailExist.UserProfile,
                                 companyName: emailExist.companyName,
+                                companyImage: emailExist.companyImage,
+                                companyDescription: emailExist.companyDescription,
                                 role: emailExist.role,
                                 token: token,
                             },
@@ -302,8 +305,10 @@ class AuthController {
 
         const currentUser = req.user
         const {name, phone, companyName, companyDescription} = req.body
+        const companyImage = req.files['companyImage'] ? req.files['companyImage'][0] : null;
+        const profileImage = req.files['profileImage'] ? req.files['profileImage'][0] : null;
 
-        const companyImage = req.file ? req.file.path : null;
+
 
         try {
 
@@ -323,7 +328,11 @@ class AuthController {
             }
 
             if(companyImage) {
-                UserData.companyImage = companyImage
+                UserData.companyImage = companyImage.path
+            }
+
+            if(profileImage) {
+                UserData.UserProfile = profileImage.path
             }
 
 

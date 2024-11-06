@@ -19,6 +19,10 @@ const UserModal = mongoose.Schema({
         type: Number,
         require: true
     },
+    UserProfile: {
+        type: String,
+        require: true
+    },
     role: {
         type: String,
         required: true,

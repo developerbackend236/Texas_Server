@@ -101,9 +101,96 @@ class ProductController {
         }
     }
 
+    static RateAProduct = async (req, res) => {
+        try {
+            const { productID, stars } = req.body;
+    
+
+            const product = await ProductModel.findOne({ _id: productID });
+            if (!product) {
+                return res.status(404).send({ message: "Product not found" });
+            }
+
+            console.log("product",product)
+    
+
+            product.TotalNumberOfRating += 1;
+    
+
+            product.AvaRating += JSON.parse(stars);
+    
+
+            const averageRating = product.AvaRating / product.TotalNumberOfRating;
     
 
 
+            await product.save();
+
+            
+            res.send({
+                message: "Rating added successfully",
+                totalRatings: product.TotalNumberOfRating,
+                averageRating: averageRating.toFixed(2), // rounding to 2 decimal places
+                product: product
+            });
+        } catch (error) {
+            res.status(500).send({ message: "Error rating product", error: error.message });
+        }
+    };
+
+    static GetAllCatagores = async (req, res) => {
+        const category = [
+            "Nuts",
+            "Bolts",
+            "Washers",
+            "Virgin plastics",
+            "Re-grind plastics",
+            "Sheet steels",
+            "Coil materials",
+            "Wire materials",
+            "Tools",
+            "Specialty",
+            "Molded parts",
+            "Custom metal parts"
+        ];
+        
+
+        res.status(200).send({
+            message: "all catagories",
+            data: category
+        })
+        
+    }
+
+
+    static FilterProductByCategory = async (req, res) => {
+        const {catagoryName} = req.body
+        console.log("catagoryName",catagoryName)
+        try {
+
+        const allCategoizeProduct = await ProductModel.find({productCategories: catagoryName})
+
+        console.log("allCategoizeProduct",allCategoizeProduct)
+            if(allCategoizeProduct){
+
+                res.status(200).send({
+                    message:"All Products",
+                    Products: allCategoizeProduct
+                })
+            }else{
+                res.status(200).send({
+                    message:"No Product found"
+                })
+            }
+
+                    
+    } catch (error) {
+     res.status(401).send({
+        error: error
+     })       
+    }
+    }
+    
 
 
 }

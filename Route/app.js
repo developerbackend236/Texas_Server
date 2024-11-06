@@ -46,7 +46,10 @@ app.post('/api/user/change-forget-password', AuthController.ChangeForgetPassword
 app.post('/api/user/change-password', Auth, AuthController.ChangePassword)
 
 
-app.post('/api/user/edit-profile', uploadCompanyImage.single('companyImage'), Auth, AuthController.EditProfile)
+app.post('/api/user/edit-profile',   uploadProduct.fields([
+    { name: 'companyImage', maxCount: 1 }, 
+    { name: 'profileImage', maxCount: 1 }
+]), Auth, AuthController.EditProfile)
 
 
 app.get('/api/user/get-my-products', Auth, AuthController.GetMyProducts)
@@ -55,12 +58,19 @@ app.get('/api/user/get-my-products', Auth, AuthController.GetMyProducts)
 // Product Routes
 app.post('/api/user/add-product', Auth, uploadProduct.array('images',5), ProductController.AddProduct)
 app.post('/api/user/GetAllProducts', Auth, ProductController.GetAllProducts)
+app.post('/api/user/FilterProductByCategory',  ProductController.FilterProductByCategory)
 app.get('/api/user/getAllCompanies',  ProductController.getAllCompanies)
 app.post('/api/user/searchProducts',  ProductController.searchProducts)
+app.get('/api/user/GetAllCatagores',  ProductController.GetAllCatagores)
+
+//Rating api
+app.post('/api/user/RateAProduct',  ProductController.RateAProduct)
 
 // app.use('/uploads', express.static('uploads'));
 app.use('/uploads', express.static('uploads'));
 app.use('/uploads', express.static('companyimage'));
+
+
 
 app.get('/',(req, res)=>{
     res.send({
