@@ -58,10 +58,12 @@ app.get('/api/user/get-my-products', Auth, AuthController.GetMyProducts)
 // Product Routes
 app.post('/api/user/add-product', Auth, uploadProduct.array('images',5), ProductController.AddProduct)
 app.post('/api/user/GetAllProducts', Auth, ProductController.GetAllProducts)
+app.post('/api/user/editProduct',  ProductController.editProduct)
 app.post('/api/user/FilterProductByCategory',  ProductController.FilterProductByCategory)
 app.get('/api/user/getAllCompanies',  ProductController.getAllCompanies)
 app.post('/api/user/searchProducts',  ProductController.searchProducts)
 app.get('/api/user/GetAllCatagores',  ProductController.GetAllCatagores)
+app.post('/api/user/deleteProduct', Auth, ProductController.deleteProduct)
 
 //Rating api
 app.post('/api/user/RateAProduct',  ProductController.RateAProduct)
