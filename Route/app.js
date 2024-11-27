@@ -7,6 +7,7 @@ const AuthController = require('./../Controllers/AuthController')
 const ProductController = require('./../Controllers/ProductController')
 const Auth = require('../Middleware/Auth_Middleware')
 const multer = require('multer')
+const StripeController = require('./../Controllers/StripeController')
 // const io = require('./acetech.js')
 db()    
 
@@ -67,6 +68,13 @@ app.post('/api/user/deleteProduct', Auth, ProductController.deleteProduct)
 
 //Rating api
 app.post('/api/user/RateAProduct',  ProductController.RateAProduct)
+
+//stripe
+app.post('/api/user/createCustomer',  StripeController.createCustomer)
+app.post('/api/user/createSetupIntent',  StripeController.createSetupIntent)
+app.post('/api/user/attachPaymentMethod',  StripeController.attachPaymentMethod)
+app.post('/api/user/listSavedCards',  StripeController.listSavedCards)
+app.post('/api/user/createPaymentIntent',  StripeController.createPaymentIntent)
 
 // app.use('/uploads', express.static('uploads'));
 app.use('/uploads', express.static('uploads'));

@@ -38,6 +38,9 @@ const UserModal = mongoose.Schema({
     },
     companyDescription: {
         type: String
+    },
+    customerId:{
+        type: String
     }
     
 
