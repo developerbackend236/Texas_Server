@@ -74,7 +74,12 @@ app.post('/api/user/createCustomer',  StripeController.createCustomer)
 app.post('/api/user/createSetupIntent',  StripeController.createSetupIntent)
 app.post('/api/user/attachPaymentMethod',  StripeController.attachPaymentMethod)
 app.post('/api/user/listSavedCards',  StripeController.listSavedCards)
-app.post('/api/user/createPaymentIntent',  StripeController.createPaymentIntent)
+app.post('/api/user/createPaymentIntent',  Auth, StripeController.createPaymentIntent)
+
+app.post('/api/user/getAllOwnerOrder',  Auth, StripeController.getAllOwnerOrder)
+app.post('/api/user/getAllUserOrder',  Auth, StripeController.getAllUserOrder)
+
+app.post('/api/user/ChangeOrderStatus',  Auth, StripeController.ChangeOrderStatus)
 
 // app.use('/uploads', express.static('uploads'));
 app.use('/uploads', express.static('uploads'));

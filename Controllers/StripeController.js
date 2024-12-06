@@ -1,13 +1,13 @@
 const User = require("../Models/UserModel");
-const Stripes = require('stripe');
-const stripe = Stripes('sk_test_51JeezZLPp9miWmIeBehyA5nUgItfdPO17LA26XivmYbKAtVOQgCjLeQ9SsY5geg6L42hrcIRru3FUd0LwjkkZrQ600r7IKo9ZR');
-
+const Stripes = require("stripe");
+const stripe = Stripes(
+  "sk_test_51JeezZLPp9miWmIeBehyA5nUgItfdPO17LA26XivmYbKAtVOQgCjLeQ9SsY5geg6L42hrcIRru3FUd0LwjkkZrQ600r7IKo9ZR"
+);
+const Order = require("../Models/Order");
 class StripeController {
   static createCustomer = async (req, res) => {
     try {
       const { email } = req.body;
-
-
 
       const findUser = await User.findOne({ email: email });
 
@@ -47,7 +47,6 @@ class StripeController {
     }
   };
 
-
   static attachPaymentMethod = async (req, res) => {
     try {
       const { customerId, paymentMethodId } = req.body;
@@ -64,7 +63,10 @@ class StripeController {
         },
       });
 
-      res.json({ success: true, message: "Payment method attached successfully" });
+      res.json({
+        success: true,
+        message: "Payment method attached successfully",
+      });
     } catch (error) {
       res.status(500).send({ error: error.message });
     }
@@ -87,8 +89,11 @@ class StripeController {
   };
 
   static createPaymentIntent = async (req, res) => {
+    const curretId = req.user;
+
     try {
-      const { amount, customerId, paymentMethodId } = req.body;
+      const { amount, customerId, paymentMethodId, product, grandTotal } =
+        req.body;
 
       const paymentIntent = await stripe.paymentIntents.create({
         amount: amount,
@@ -102,9 +107,86 @@ class StripeController {
         confirm: true,
       });
 
+      product.forEach(async (e) => {
+        const newOrder = await Order({
+          buyerId: curretId._id,
+          productId: e.id,
+          OwnerId: e.OwnerId,
+          status: "neworder",
+          grandTotal: grandTotal,
+          quantity: e.quantity,
+          price: e.price,
+        });
+
+        await newOrder.save();
+      });
+
       res.json({ clientSecret: paymentIntent.client_secret });
     } catch (error) {
       res.status(500).send({ error: error.message });
+    }
+  };
+
+  static getAllOwnerOrder = async (req, res) => {
+    const currentUser = req.user;
+    try {
+      const allOwnerOrder = await Order.find({ OwnerId: currentUser._id });
+      if (allOwnerOrder) {
+        res.send({
+          message: "All orders of owner",
+          data: allOwnerOrder,
+        });
+      } else {
+        res.send({
+          message: "No order found",
+        });
+      }
+    } catch (error) {
+      res.send({
+        error: error.message,
+      });
+    }
+  };
+
+  static getAllUserOrder = async (req, res) => {
+    const currentUser = req.user;
+    try {
+      const allbuyerOrder = await Order.find({ buyerId: currentUser._id });
+      if (allbuyerOrder) {
+        res.send({
+          message: "All orders of buyer",
+          data: allbuyerOrder,
+        });
+      } else {
+        res.send({
+          message: "No order found",
+        });
+      }
+    } catch (error) {
+      res.send({
+        error: error.message,
+      });
+    }
+  };
+
+  static ChangeOrderStatus = async (req, res) => {
+    const { orderId, status } = req.body;
+
+    const findOrder = await Order.findOne({ _id: orderId });
+    try {
+      if (findOrder) {
+        findOrder.status = status;
+
+        await findOrder.save();
+      } else {
+        res.send({
+          message: "no order found",
+        });
+      }
+    } catch (error) {
+      res.send({
+        message: error.message,
+      });
     }
   };
 }
