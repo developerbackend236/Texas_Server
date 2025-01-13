@@ -354,6 +354,24 @@ class AuthController {
         }
     }
 
+    static deleteAccount = async (req, res) => {
+            try {
+                const userId = req.user._id;
+                const deleteUser = await UserModel.findByIdAndDelete({_id: userId});
+                return res.status(200).json({
+                    success: true,
+                    message: "User Deleted Successfully."
+                })
+
+            } catch (error) {
+                return res.status(401).json({
+                    success: true,
+                    message: "Error.",
+                    error: error
+                })
+            }
+        
+    }
 }
 
 

@@ -45,6 +45,7 @@ app.post('/api/user/forget-password', AuthController.ForgetPassword)
 app.post('/api/user/forget-password-code-verify/:code/:id', AuthController.ForgetPasswordCodeVerify)
 app.post('/api/user/change-forget-password', AuthController.ChangeForgetPassword)
 app.post('/api/user/change-password', Auth, AuthController.ChangePassword)
+app.delete('/api/user/delete', Auth, AuthController.deleteAccount)
 
 
 app.post('/api/user/edit-profile',   uploadProduct.fields([
@@ -58,7 +59,7 @@ app.get('/api/user/get-my-products', Auth, AuthController.GetMyProducts)
 
 // Product Routes
 app.post('/api/user/add-product', Auth, uploadProduct.array('images',5), ProductController.AddProduct)
-app.post('/api/user/GetAllProducts', Auth, ProductController.GetAllProducts)
+app.post('/api/user/GetAllProducts', ProductController.GetAllProducts)
 app.post('/api/user/editProduct',  ProductController.editProduct)
 app.post('/api/user/FilterProductByCategory',  ProductController.FilterProductByCategory)
 app.get('/api/user/getAllCompanies',  ProductController.getAllCompanies)

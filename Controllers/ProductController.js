@@ -127,18 +127,18 @@ class ProductController {
 
   static GetAllCatagores = async (req, res) => {
     const category = [
-      "Nuts",
-      "Bolts",
-      "Washers",
-      "Virgin plastics",
-      "Re-grind plastics",
-      "Sheet steels",
-      "Coil materials",
-      "Wire materials",
-      "Tools",
-      "Specialty",
-      "Molded parts",
-      "Custom metal parts",
+      "nuts",
+      "bolts",
+      "washers",
+      "virgin plastics",
+      "re-grind plastics",
+      "sheet steels",
+      "coil materials",
+      "wire materials",
+      "tools",
+      "specialty",
+      "molded parts",
+      "custom metal parts",
     ];
 
     res.status(200).send({
